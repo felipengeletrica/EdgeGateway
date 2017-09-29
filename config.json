@@ -1,0 +1,16 @@
+{
+    "devices":[
+        {
+        "serialport": "/dev/tty.usbserial-14414",
+        "baudrate": 115200,
+        "timeout": 5,
+        "description":"PLACA DE TESTES TIMER PIC"
+        },
+        {
+        "serialport": "/dev/tty.usbserial-6666",
+        "baudrate": 115200,
+        "timeout": 5,
+        "description":"TESTE MODULO WIFI"
+        }
+    ]
+}
