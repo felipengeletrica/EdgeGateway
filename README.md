@@ -1,5 +1,5 @@
 # Python Serial RS232 Datalogger for debugging embedded systems 
-(Like ESP WIFI modules, microcontrollers, Linux serial console)
+### Like ESP WIFI modules, microcontrollers, Linux serial console etc.
 
 <space><space><space><space><space><space><space>With this program it is possible to save logs from different serial 
 ports just by configuring the JSON file (config.json), the number of ports and 
@@ -10,6 +10,4 @@ microcontrolados saving in database.
    After that I use some Querys to extract the faults.<br/>
 <space><space><space><space><space><space><space> For the development 
 I am using Pycharm of jetbrains is a great tool for Python!
-   
-
-   
+  
