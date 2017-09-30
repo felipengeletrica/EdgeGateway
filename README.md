@@ -10,4 +10,4 @@ microcontrolados saving in database.
    After that I use some Querys to extract the faults.<br/>
 <space><space><space><space><space><space><space> For the development 
 I am using Pycharm of jetbrains is a great tool for Python!
-  
+    

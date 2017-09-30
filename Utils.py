@@ -42,7 +42,7 @@ import re
 class Utils(object):
 
     @staticmethod
-    def checkipformat(self, ip):
+    def checkipformat(ip):
 
         try:
 
@@ -58,7 +58,7 @@ class Utils(object):
             raise
 
     @staticmethod
-    def getlocalIp(self):
+    def getlocalIp():
 
         """"Get local IP address.
         """
@@ -75,7 +75,7 @@ class Utils(object):
             return ip
 
     @staticmethod
-    def getPublicIp(self):
+    def getPublicIp():
 
         """Get external IP using dyndns"""
         try:
@@ -90,7 +90,18 @@ class Utils(object):
             return externalip
 
     @staticmethod
-    def datafile(self, name, mode):
+    def remove_special_car(data):
+
+        """Get external IP using dyndns"""
+        try:
+            re.sub('[^A-Za-z0-9]+', ' ', data)
+        except:
+            data = None
+            raise
+        return data
+
+    @staticmethod
+    def datafile(name, mode):
 
         try:
             data = open(name, mode)
@@ -100,7 +111,7 @@ class Utils(object):
         return data
 
     @staticmethod
-    def writedatafile(self, name, mode, message):
+    def writedatafile(name, mode, message):
 
         try:
             with open(name, mode) as file:
