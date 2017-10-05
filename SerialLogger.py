@@ -145,7 +145,7 @@ class logger(threading.Thread):
                     #if debug is True:
                         #print 'Data: ', data
 
-                    log = '{0} {1}'.format(header, re.sub('[^A-Za-z0-9]+', ' ', data))
+                    log = '{0}'.format(re.sub('[^A-Za-z0-9]+', ' ', data))
 
                     if debug is True:
                         print log + '[' + str(datetime.datetime.now()) + ']'
