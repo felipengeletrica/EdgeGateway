@@ -28,12 +28,6 @@
 #of the authors and should not be interpreted as representing official policies,
 #either expressed or implied, of the FreeBSD Project.
 
-import serial
-import time
-import datetime
-import threading
-import re
-import json
 import sys
 import os
 
@@ -50,16 +44,18 @@ class DataAnalysis(object):
     def __init__(self):
 
         try:
-
             print "Data Analysis init"
 
         except Exception as error:
-
-            print "Data Analysis init FAIL: ", error
+            raise error
 
     def processdata(self, data, description):
 
-        #save in CSV format
-        dataforsave = "{0};Data{1};".format(description, data)
-        Utils.Utils.writedatafile("logs.csv", 'a', dataforsave)
-        print "Description: {0}, Data{1}: ".format(description, data)
+        try:
+            #save in CSV format
+            dataforsave = "{0};Data{1}\r".format(description, data)
+            Utils.Utils.writedatafile("logs.csv", 'a', dataforsave)
+            print dataforsave
+
+        except Exception as error:
+            raise error
