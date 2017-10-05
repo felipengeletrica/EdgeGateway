@@ -77,7 +77,7 @@ def init_data_instances(datajson):
         # Create threads for instances in datalogger
         for index in range(0, len(devices)):
             print "Devices:{0}".format(devices[index]['description'])
-            devs.append(logger(devices[index]['description'] + " " + timestamp))
+            devs.append(logger(devices[index]['description']))
             devs[index].run(devices[index]['serialport'], devices[index]['baudrate'], devices[index]['timeout'])
     except Exception as error:
 
