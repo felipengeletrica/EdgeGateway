@@ -30,6 +30,8 @@
 
 import sys
 import os
+import datetime
+
 
 debug = False
 
@@ -53,7 +55,8 @@ class DataAnalysis(object):
 
         try:
             #save in CSV format
-            dataforsave = "{0};Data{1}\r".format(description, data)
+            timestamp = str(datetime.datetime.now())
+            dataforsave = "{0};{1};{2}\r".format(description, data, timestamp)
             Utils.Utils.writedatafile("logs.csv", 'a', dataforsave)
             print dataforsave
 
