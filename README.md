@@ -11,3 +11,85 @@ microcontrolados saving in database.
 <space><space><space><space><space><space><space> For the development 
 I am using Pycharm of jetbrains is a great tool for Python!
     
+    
+#####Using file JSON for configuration for multiple serial ports:
+
+
+
+Exemple a serial porta:
+
+{<br/>
+<tab>"devices":<br/>
+<tab><tab><tab><tab><tab>[<br/>
+<tab><tab><tab><tab><tab><tab><tab><tab>{<br/>
+<tab><tab><tab><tab><tab><tab><tab>"serialport": "/dev/ttyUSB0",<br/>
+<tab><tab><tab><tab><tab><tab><tab>"baudrate": 115200,<br/>
+<tab><tab><tab><tab><tab><tab><tab>"timeout": 5,<br/>
+<tab><tab><tab><tab><tab><tab><tab>"description":"TEST MODULE WIFI"<br/>
+<tab><tab><tab><tab><tab><tab>}<br/>
+<tab><tab><tab><tab>]<br/>
+}<br/>
+
+
+
+Example two serial ports:
+
+{<br/>
+<tab>"devices":<br/>
+<tab><tab><tab><tab><tab>[<br/>
+<tab><tab><tab><tab><tab><tab><tab><tab>{<br/>
+<tab><tab><tab><tab><tab><tab><tab>"serialport": "/dev/ttyUSB0",<br/>
+<tab><tab><tab><tab><tab><tab><tab>"baudrate": 115200,<br/>
+<tab><tab><tab><tab><tab><tab><tab>"timeout": 5,<br/>
+<tab><tab><tab><tab><tab><tab><tab>"description":"TEST MODULE WIFI"<br/>
+<tab><tab><tab><tab><tab><tab>}<br/>
+<tab><tab><tab><tab><tab><tab>,<br/>
+<tab><tab><tab><tab><tab><tab>{<br/>
+<tab><tab><tab><tab><tab><tab><tab>"serialport": "/dev/ttyUSB1",<br/>
+<tab><tab><tab><tab><tab><tab><tab>"baudrate": 115200,<br/>
+<tab><tab><tab><tab><tab><tab><tab>"timeout": 5,<br/>
+<tab><tab><tab><tab><tab><tab><tab>"description":"TEST MAIN CPU"<br/>
+<tab><tab><tab><tab><tab><tab>}<br/>
+<tab><tab><tab><tab>]<br/>
+}<br/>
+
+
+Exemple three serial ports:
+
+{<br/>
+<tab>"devices":<br/>
+<tab><tab><tab><tab><tab>[<br/>
+<tab><tab><tab><tab><tab><tab><tab><tab>{<br/>
+<tab><tab><tab><tab><tab><tab><tab>"serialport": "/dev/ttyUSB0",<br/>
+<tab><tab><tab><tab><tab><tab><tab>"baudrate": 115200,<br/>
+<tab><tab><tab><tab><tab><tab><tab>"timeout": 5,<br/>
+<tab><tab><tab><tab><tab><tab><tab>"description":"TEST MODULE WIFI"<br/>
+<tab><tab><tab><tab><tab><tab>}<br/>
+<tab><tab><tab><tab><tab><tab>,<br/>
+<tab><tab><tab><tab><tab><tab>{<br/>
+<tab><tab><tab><tab><tab><tab><tab>"serialport": "/dev/ttyUSB1",<br/>
+<tab><tab><tab><tab><tab><tab><tab>"baudrate": 115200,<br/>
+<tab><tab><tab><tab><tab><tab><tab>"timeout": 5,<br/>
+<tab><tab><tab><tab><tab><tab><tab>"description":"TEST MAIN CPU"<br/>
+<tab><tab><tab><tab><tab><tab>}<br/>
+<tab><tab><tab><tab><tab><tab>,<br/>
+<tab><tab><tab><tab><tab><tab>{<br/>
+<tab><tab><tab><tab><tab><tab><tab>"serialport": "/dev/ttyUSB2",<br/>
+<tab><tab><tab><tab><tab><tab><tab>"baudrate": 115200,<br/>
+<tab><tab><tab><tab><tab><tab><tab>"timeout": 5,<br/>
+<tab><tab><tab><tab><tab><tab><tab>"description":"TEST LOGS uC AUXILIAR"<br/>
+<tab><tab><tab><tab><tab><tab>}<br/>
+<tab><tab><tab><tab>]<br/>
+}<br/>
+
+
+Note:
+
+            The capacity of the data logger depends only on the CPU and disk IO speeds!                
+
+
+
+
+
+
+
