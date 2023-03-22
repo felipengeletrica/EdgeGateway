@@ -19,7 +19,7 @@ class DataAnalysis(object):
     def __init__(self):
 
         try:
-            print "Data Analysis init"
+            print("Data Analysis init")
 
         except Exception as error:
             raise error
@@ -31,7 +31,7 @@ class DataAnalysis(object):
             timestamp = str(datetime.datetime.now())
             dataforsave = "{0};{1};{2}\r".format(description, data, timestamp)
             Utils.Utils.writedatafile("logs.csv", 'a', dataforsave)
-            print dataforsave
+            print(dataforsave)
 
         except Exception as error:
             raise error

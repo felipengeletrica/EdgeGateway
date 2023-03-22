@@ -25,7 +25,7 @@ class logger(threading.Thread):
         try:
             threading.Thread.__init__(self)
 
-            print "New instance logging", description
+            print("New instance logging"), description
             self.s = None
             self.baudrate = None
             self.port = None
@@ -79,13 +79,13 @@ class logger(threading.Thread):
             self.connState = self.s.isOpen()
 
             if debug is True:
-                print "Baudrate: ", self.baudrate
-                print "Port: ", self.port
-                print "Timeout: {0} ms".format(self.timeout)
+                print("Baudrate: ", self.baudrate)
+                print("Port: ", self.port)
+                print("Timeout: {0} ms".format(self.timeout))
 
         except Exception as error:
             self.connState = False
-            print error
+            print(error)
             raise
 
     def disconnect(self):
@@ -111,17 +111,14 @@ class logger(threading.Thread):
 
             try:
 
-                data = self.s.readline()
-                #print data
+                data = self.s.readline().decode()
+                # print(data)
                 if len(data):
 
-                    #if debug is True:
-                        #print 'Data: ', data
-
-                    log = '{0}'.format(re.sub('[^A-Za-z0-9]+', ' ', data))
+                    log = re.sub('[^A-Za-z0-9]+', '', data)
 
                     if debug is True:
-                        print log + '[' + str(datetime.datetime.now()) + ']'
+                        print(log + '[' + str(datetime.datetime.now()) + ']')
 
                     # Data analysis class
                     dataanalysis.processdata(log, self.description)
@@ -129,5 +126,5 @@ class logger(threading.Thread):
             except Exception as error:
 
                 self.connState = False
-                print "exception data: ", error
+                print("exception data: ", error)
                 raise
