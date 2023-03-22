@@ -1,33 +1,6 @@
 #!/usr/bin/env python
 #-*- coding: latin-1 -*-
 
-#Copyright (c) 2017, Felipe Vargas <felipeng.eletrica@gmail.com>
-#All rights reserved.
-#
-#Redistribution and use in source and binary forms, with or without
-#modification, are permitted provided that the following conditions are met:
-#
-#1. Redistributions of source code must retain the above copyright notice, this
-#   list of conditions and the following disclaimer.
-#2. Redistributions in binary form must reproduce the above copyright notice,
-#   this list of conditions and the following disclaimer in the documentation
-#   and/or other materials provided with the distribution.
-#
-#THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-#ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-#WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-#DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-#ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-#(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-#LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-#ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-#(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-#SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-#The views and conclusions contained in the software and documentation are those
-#of the authors and should not be interpreted as representing official policies,
-#either expressed or implied, of the FreeBSD Project.
-
 import serial
 import time
 import datetime
@@ -52,7 +25,7 @@ class logger(threading.Thread):
         try:
             threading.Thread.__init__(self)
 
-            print "New instance logging", description
+            print("New instance logging"), description
             self.s = None
             self.baudrate = None
             self.port = None
@@ -106,13 +79,13 @@ class logger(threading.Thread):
             self.connState = self.s.isOpen()
 
             if debug is True:
-                print "Baudrate: ", self.baudrate
-                print "Port: ", self.port
-                print "Timeout: {0} ms".format(self.timeout)
+                print("Baudrate: ", self.baudrate)
+                print("Port: ", self.port)
+                print("Timeout: {0} ms".format(self.timeout))
 
         except Exception as error:
             self.connState = False
-            print error
+            print(error)
             raise
 
     def disconnect(self):
@@ -138,17 +111,14 @@ class logger(threading.Thread):
 
             try:
 
-                data = self.s.readline()
-                #print data
+                data = self.s.readline().decode()
+                # print(data)
                 if len(data):
 
-                    #if debug is True:
-                        #print 'Data: ', data
-
-                    log = '{0}'.format(re.sub('[^A-Za-z0-9]+', ' ', data))
+                    log = re.sub('[^A-Za-z0-9]+', '', data)
 
                     if debug is True:
-                        print log + '[' + str(datetime.datetime.now()) + ']'
+                        print(log + '[' + str(datetime.datetime.now()) + ']')
 
                     # Data analysis class
                     dataanalysis.processdata(log, self.description)
@@ -156,5 +126,5 @@ class logger(threading.Thread):
             except Exception as error:
 
                 self.connState = False
-                print "exception data: ", error
+                print("exception data: ", error)
                 raise
