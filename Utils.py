@@ -2,7 +2,7 @@
 #-*- coding: latin-1 -*-
 
 import socket
-from urllib import urlopen
+from urllib import request
 import re
 
 
@@ -46,7 +46,7 @@ class Utils(object):
 
         """Get external IP using dyndns"""
         try:
-            data = str(urlopen('http://checkip.dyndns.com/').read())
+            data = str(request('http://checkip.dyndns.com/').read())
             #data = '<html><head><title>Current IP Check</title></head><body>Current IP Address: 65.96.168.198</body></html>\r\n'
             externalip = re.compile(r'Address: (\d+\.\d+\.\d+\.\d+)').search(data).group(1)
 
