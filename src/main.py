@@ -5,15 +5,17 @@ import os
 import sys
 
 from SerialLogger import logger
+from BluetoothGpsAgrinavi import BluetoothGpsAgrinavi
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 script_path = os.path.dirname(os.path.abspath(__file__))
+parent_path = os.path.abspath(os.path.join(script_path, os.pardir))
 
 def LoadJSON():
 
     try:
         # Load configurations using file JSON
-        with open(script_path + '/config.json') as json_data_file:
+        with open(parent_path + '/config.json') as json_data_file:
             data = json.load(json_data_file)
 
     except Exception as error:
@@ -38,13 +40,37 @@ def init_data_instances(datajson):
         print(f"Start Server Logging {timestamp}")
         
         devs = list()
+        
         # Create threads for instances in datalogger
         for index in range(0, len(devices)):
-            print(f"Devices:{devices[index]['description']}")
-            devs.append(logger(devices[index]['description']))
-            devs[index].run(devices[index]['serialport'], devices[index]['baudrate'], devices[index]['timeout'])
-    except Exception as error:
+            print(f"Devices:{devices[index]['description']} Interface:{devices[index]['interface']}")
 
+            # Serial Interface
+            if "serial" in devices[index]['interface']:
+                devs.append(
+                    logger(
+                        description=devices[index]['description'])
+                )
+                # Execute process
+                devs[index].run(
+                    port=devices[index]['serialport'],
+                    baudrate=devices[index]['baudrate'],
+                    timeout=devices[index]['timeout'])
+
+            # Bluetooth interface
+            elif "bluetooth" in devices[index]['interface']:
+                devs.append(
+                    BluetoothGpsAgrinavi(
+                        description=devices[index]['description'],
+                        timeIgnoreData=devices[index]['samplingSeconds']))
+                devs[index].run(
+                    port=devices[index]['port'],
+                    address=devices[index]['address']
+                )
+            else:
+                Exception("Invalid device")
+        a = 1
+    except Exception as error:
         raise error
 
 
@@ -62,9 +88,7 @@ def main():
             keepAliveTimestamp = str(datetime.datetime.now())
             print(f"Keep Alive Datalogger {keepAliveTimestamp} \n\r")
             time.sleep(10)
-
         except Exception as error:
-
             print("Error: ", error)
 
 if __name__ == "__main__":

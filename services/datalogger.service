@@ -1,0 +1,13 @@
+[Unit]
+Description=Python Serial RS232 Datalogger for debugging embedded systems 
+
+[Service]
+Environment=PYTHONUNBUFFERED=1
+Type=simple
+WorkingDirectory=/usr/bin/datalogger
+ExecStart=/usr/bin/datalogger/env/bin/python3 ./src/main.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=basic.target

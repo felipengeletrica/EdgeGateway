@@ -112,10 +112,10 @@ class logger(threading.Thread):
             try:
 
                 data = self.s.readline().decode()
-                # print(data)
+                #print(data)
                 if len(data):
 
-                    log = re.sub('[^A-Za-z0-9]+', '', data)
+                    log = data.strip()
 
                     if debug is True:
                         print(log + '[' + str(datetime.datetime.now()) + ']')

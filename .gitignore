@@ -1,4 +1,25 @@
+# IDE settings
+.vscode/
+.idea/
+
+# Byte-compiled / optimized / DLL files
 __pycache__
-logs.csv
+*.py[cod]
+*$py.class
+
+# Logs files
+logs/
+
+# Config files
 config.json
+
+# Local development settings
+venv/
+env/
 .env
+
+# Testing
+.tox/
+pytest_cache/
+coverage_html_report/
+htmlcov/
