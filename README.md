@@ -73,14 +73,21 @@ Example two serial ports:
       "port": 1,
       "samplingSeconds": 1,
       "description": "AGP",
-      "interface": "bluetooth"
+      "interface": "bluetooth-gps"
     },
     {
       "address": "E8:31:CD:5C:AC:B2",
       "port": 1,
       "samplingSeconds": 1,
       "description": "DBG",
-      "interface": "bluetooth"
+      "interface": "bluetooth-gps"
+    },
+    {
+      "address": "E8:31:CD:5C:AC:B2",
+      "port": 1,
+      "samplingSeconds": 1,
+      "description": "Logs from BLE",
+      "interface": "bluetooth-BLE"
     }
   ]
 }

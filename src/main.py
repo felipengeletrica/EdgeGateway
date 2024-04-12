@@ -6,6 +6,7 @@ import sys
 
 from SerialLogger import logger
 from BluetoothGpsAgrinavi import BluetoothGpsAgrinavi
+from BLEConnector import BLEConnector
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 script_path = os.path.dirname(os.path.abspath(__file__))
@@ -58,7 +59,7 @@ def init_data_instances(datajson):
                     timeout=devices[index]['timeout'])
 
             # Bluetooth interface
-            elif "bluetooth" in devices[index]['interface']:
+            elif "bluetooth-gps" in devices[index]['interface']:
                 devs.append(
                     BluetoothGpsAgrinavi(
                         description=devices[index]['description'],
@@ -66,6 +67,19 @@ def init_data_instances(datajson):
                 devs[index].run(
                     port=devices[index]['port'],
                     address=devices[index]['address']
+                )
+
+            # Bluetooth BLE interface
+            elif "bluetooth-BLE" in devices[index]['interface']:
+
+                devs.append(
+                    BLEConnector(
+                        device_name=devices[index]['description']
+                    )
+                )
+                devs[index].run(
+                    service_uuid = devices[index]['service_uuid'],
+                    characteristic_uuid = devices[index]['characteristic_uuid'],
                 )
             else:
                 Exception("Invalid device")

@@ -5,3 +5,5 @@ setuptools==57.5.0
 PyBluez==0.22
 RPi.GPIO==0.7.1
 keyboard==0.13.5
+bluepy
+pyserial

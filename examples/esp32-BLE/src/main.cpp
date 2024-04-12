@@ -39,6 +39,8 @@ void setup() {
     pService->start();
     BLEAdvertising *pAdvertising = pServer->getAdvertising();
     pAdvertising->start();
+
+    Serial.println("START BLE SAMPLE");
 }
 
 void loop() {
