@@ -33,3 +33,6 @@ class BLEConnector(threading.Thread):
                     continue
                 except Exception as e:
                     return None, str(e)
+                
+            except Exception as e:
+                    return None, str(e)
