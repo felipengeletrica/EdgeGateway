@@ -1,9 +1,13 @@
 pyserial==3.4
 pynmeagps==1.0.20
 pynmea2==1.19.0
-setuptools==57.5.0
-PyBluez==0.22
+setuptools==58
+git+https://github.com/pybluez/pybluez.git#egg=pybluez
 RPi.GPIO==0.7.1
 keyboard==0.13.5
-bluepy
 pyserial
+bluepy
+pygobject
+dbus-python
+bleak
+

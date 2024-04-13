@@ -78,8 +78,7 @@ def init_data_instances(datajson):
                     )
                 )
                 devs[index].run(
-                    service_uuid = devices[index]['service_uuid'],
-                    characteristic_uuid = devices[index]['characteristic_uuid'],
+                    mac_address=devices[index]['mac-address']
                 )
             else:
                 Exception("Invalid device")

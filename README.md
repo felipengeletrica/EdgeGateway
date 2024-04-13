@@ -110,3 +110,7 @@ If you are not running "pybluez", install the following dependencies:
 ```bash 
 sudo apt-get install bluetooth libbluetooth-dev
 ```
+For scan devices:
+
+bluetoothctl
+
