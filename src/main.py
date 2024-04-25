@@ -4,7 +4,7 @@ import json
 import os
 import sys
 
-from SerialLogger import logger
+from interface.SerialLogger import logger
 from BluetoothGpsAgrinavi import BluetoothGpsAgrinavi
 from BLEConnector import BLEConnector
 
