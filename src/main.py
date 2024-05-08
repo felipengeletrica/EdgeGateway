@@ -1,16 +1,32 @@
+#!/usr/bin/env python3
+# coding=utf-8
+"""
+    Main program for datalogger interface
+"""
+
+# region import
 import datetime
 import time
 import json
 import os
 import sys
 
-from interface.SerialLogger import logger
-from BluetoothGpsAgrinavi import BluetoothGpsAgrinavi
-from BLEConnector import BLEConnector
-
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 script_path = os.path.dirname(os.path.abspath(__file__))
 parent_path = os.path.abspath(os.path.join(script_path, os.pardir))
+
+from src.interface.SerialLogger import logger
+from src.interface.BluetoothGpsAgrinavi import BluetoothGpsAgrinavi
+from src.interface.BLEConnector import BLEConnector
+from src.interface.mqtt_manager import MqttManager
+# endregion
+
+
+
+
+def handle_message(message_content):
+    print("Received message:", message_content)
+
 
 def LoadJSON():
 
@@ -32,6 +48,25 @@ def init_data_instances(datajson):
         Load file of configuration and start multiples instances serial datalooger
     """
 
+
+    server_mqtt = datajson["server_mqtt"]
+
+    print(server_mqtt)
+
+    if server_mqtt is not None:
+        # Criar uma instância de MqttManager com a função de callback
+        mqtt_manager = MqttManager(
+            username=server_mqtt['username'], 
+            password=server_mqtt['password'], 
+            server=server_mqtt['server'], 
+            port=server_mqtt['port'],
+            client='client1', 
+            subscribe=server_mqtt['subscribe'],
+            message_callback=handle_message)
+        
+        mqtt_manager.start()  # Iniciar o cliente MQTT
+
+
     try:
 
         # After JSON LOAD
@@ -48,6 +83,17 @@ def init_data_instances(datajson):
 
             # Serial Interface
             if "serial" in devices[index]['interface']:
+                devs.append(
+                    logger(
+                        description=devices[index]['description'])
+                )
+                # Execute process
+                devs[index].run(
+                    port=devices[index]['serialport'],
+                    baudrate=devices[index]['baudrate'],
+                    timeout=devices[index]['timeout'])
+
+            elif "serial-to-mqtt" in devices[index]['interface']:
                 devs.append(
                     logger(
                         description=devices[index]['description'])
