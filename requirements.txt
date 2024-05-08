@@ -1,4 +1,3 @@
-pyserial==3.4
 pynmeagps==1.0.20
 pynmea2==1.19.0
 setuptools==58
@@ -10,4 +9,5 @@ bluepy
 pygobject
 dbus-python
 bleak
+paho-mqtt
 
