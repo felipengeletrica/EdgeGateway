@@ -21,8 +21,7 @@ class MqttManager(threading.Thread):
         server: str,
         port: int,
         client: str,
-        subscribe: str,
-        message_callback=None,
+        subscribe: str
     ):
         """
         Instance MQTT connections
@@ -79,7 +78,7 @@ class MqttManager(threading.Thread):
             retry = self.retry
             while retry > 0:
                 (rc, mid) = self.client.publish(topic=topic, payload=payload, qos=1)
-                print(f"Status publish: {(rc, mid)}")
+                # print(f"Status publish: {(rc, mid)}")
                 if rc == 0:
                     return rc
                 time.sleep(0.3)
@@ -112,8 +111,8 @@ class MqttManager(threading.Thread):
         :param msg: msg
         """
         content = json.loads(msg.payload)
-        if self.on_message_callback:
-            self.on_message_callback(content)  # Chama a função de callback com o conteúdo da mensagem
+        #if self.on_message_callback:
+        #    self.on_message_callback(content)  # Chama a função de callback com o conteúdo da mensagem
 
     def stop(self):
         """

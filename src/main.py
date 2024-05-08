@@ -16,20 +16,14 @@ script_path = os.path.dirname(os.path.abspath(__file__))
 parent_path = os.path.abspath(os.path.join(script_path, os.pardir))
 
 from src.interface.SerialLogger import logger
+from src.interface.SerialToMQTT import SerialToMQTT
 from src.interface.BluetoothGpsAgrinavi import BluetoothGpsAgrinavi
 from src.interface.BLEConnector import BLEConnector
-from src.interface.mqtt_manager import MqttManager
+
+
 # endregion
 
-
-
-
-def handle_message(message_content):
-    print("Received message:", message_content)
-
-
 def LoadJSON():
-
     try:
         # Load configurations using file JSON
         with open(parent_path + '/config.json') as json_data_file:
@@ -43,29 +37,9 @@ def LoadJSON():
 
 
 def init_data_instances(datajson):
-
     """
         Load file of configuration and start multiples instances serial datalooger
     """
-
-
-    server_mqtt = datajson["server_mqtt"]
-
-    print(server_mqtt)
-
-    if server_mqtt is not None:
-        # Criar uma instância de MqttManager com a função de callback
-        mqtt_manager = MqttManager(
-            username=server_mqtt['username'], 
-            password=server_mqtt['password'], 
-            server=server_mqtt['server'], 
-            port=server_mqtt['port'],
-            client='client1', 
-            subscribe=server_mqtt['subscribe'],
-            message_callback=handle_message)
-        
-        mqtt_manager.start()  # Iniciar o cliente MQTT
-
 
     try:
 
@@ -74,15 +48,15 @@ def init_data_instances(datajson):
 
         timestamp = str(datetime.datetime.now())
         print(f"Start Server Logging {timestamp}")
-        
+
         devs = list()
-        
+
         # Create threads for instances in datalogger
         for index in range(0, len(devices)):
             print(f"Devices:{devices[index]['description']} Interface:{devices[index]['interface']}")
 
             # Serial Interface
-            if "serial" in devices[index]['interface']:
+            if "serial" == devices[index]['interface']:
                 devs.append(
                     logger(
                         description=devices[index]['description'])
@@ -93,10 +67,16 @@ def init_data_instances(datajson):
                     baudrate=devices[index]['baudrate'],
                     timeout=devices[index]['timeout'])
 
-            elif "serial-to-mqtt" in devices[index]['interface']:
+            elif "serial-to-mqtt" == devices[index]['interface']:
+
+                server_mqtt = datajson["server_mqtt"]
+                if server_mqtt is None:
+                    Exception("Server MQTT not configured")
+
                 devs.append(
-                    logger(
-                        description=devices[index]['description'])
+                    SerialToMQTT(
+                        description=devices[index]['description'],
+                        server_mqtt=server_mqtt)
                 )
                 # Execute process
                 devs[index].run(
@@ -105,7 +85,7 @@ def init_data_instances(datajson):
                     timeout=devices[index]['timeout'])
 
             # Bluetooth interface
-            elif "bluetooth-gps" in devices[index]['interface']:
+            elif "bluetooth-gps" == devices[index]['interface']:
                 devs.append(
                     BluetoothGpsAgrinavi(
                         description=devices[index]['description'],
@@ -116,7 +96,7 @@ def init_data_instances(datajson):
                 )
 
             # Bluetooth BLE interface
-            elif "bluetooth-BLE" in devices[index]['interface']:
+            elif "bluetooth-BLE" == devices[index]['interface']:
 
                 devs.append(
                     BLEConnector(
@@ -134,8 +114,7 @@ def init_data_instances(datajson):
 
 
 def main():
-
-    print ("###############  Server Tests ########################")
+    print("###############  Server Tests ########################")
     data_json = LoadJSON()
 
     init_data_instances(data_json)
@@ -149,6 +128,7 @@ def main():
             time.sleep(10)
         except Exception as error:
             print("Error: ", error)
+
 
 if __name__ == "__main__":
     main()
