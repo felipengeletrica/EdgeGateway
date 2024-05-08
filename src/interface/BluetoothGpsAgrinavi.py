@@ -1,9 +1,8 @@
-import re
 import threading
 import time
 import bluetooth
 import pynmea2
-from Dataanalysis import DataAnalysis
+from src.storage.Dataanalysis import DataAnalysis
 
 class BluetoothGpsAgrinavi(threading.Thread):
 
