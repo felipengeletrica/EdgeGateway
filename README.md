@@ -50,34 +50,42 @@ To find the tty port associated with your microcontroller using the `ls /dev/ser
 > By using this path to access the serial device instead of the port number (e.g., `/dev/ttyACM0`), the operating system will always point to the correct device, regardless of how many times the microcontroller is disconnected and reconnected.
 
 
+| Interface          | Description                                                       | Configuration Example                                                   | Implementations Status  |
+|--------------------|-------------------------------------------------------------------|-------------------------------------------------------------------------|-------------------------|
+| Serial-to-File     | Serial communication interface for saving data locally.            | ```json { "serialport": "...", "baudrate": 115200, "timeout": 5, ... }``` | In progress             |
+| Serial-to-MQTT     | Converts serial data to MQTT messages. **MQTT setup is mandatory.**| ```json { "serialport": "...", "baudrate": 115200, "timeout": 5, ... }``` | Implemented             |
+| Bluetooth-GPS      | Connects GPS devices via Bluetooth.                                | ```json { "address": "...", "port": 1, "samplingSeconds": 1, ... }```     | In progress             |
+| Bluetooth-BLE      | Connects BLE devices via Bluetooth Low Energy.                     | ```json { "address": "...", "port": 1, "samplingSeconds": 1, ... }```     | Planned                 |
+| Others             | Unspecified interfaces causing exceptions for invalid devices.      | No specific configuration example provided.                               | Not applicable          |
+| MQTT Server        | MQTT server setup for Serial-to-MQTT interface. **Mandatory.**     | No specific configuration example provided.                               | Implemented             |
 
-| Interface               | Descrição                                                                                                                                                                                                                                                                                                            | Uso no Código                                                                                                                                                                                                                                                                                       |
-|-------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Serial                  | Interface de comunicação serial usada para comunicação ponto a ponto entre dispositivos.                                                                                                                                                                                                                              | Verifica se a chave "serial" está presente na interface do dispositivo e, se sim, executa o processo associado à interface serial.                                                                                                                                                                   |
-| Serial-to-MQTT           | Interface que converte dados recebidos pela porta serial em mensagens MQTT para comunicação em rede.                                                                                                                                                                                                                   | Verifica se a chave "serial-to-mqtt" está presente na interface do dispositivo e, se sim, executa o processo associado à interface serial para MQTT.                                                                                                                                                 |
-| Bluetooth-GPS           | Interface Bluetooth usada para conectar dispositivos GPS ao sistema.                                                                                                                                                                                                                                                 | Verifica se a chave "bluetooth-gps" está presente na interface do dispositivo e, se sim, executa o processo associado à interface Bluetooth-GPS.                                                                                                                                                  |
-| Bluetooth-BLE           | Interface Bluetooth Low Energy (BLE) usada para conectar dispositivos BLE ao sistema.                                                                                                                                                                                                                                 | Verifica se a chave "bluetooth-BLE" está presente na interface do dispositivo e, se sim, executa o processo associado à interface Bluetooth-BLE.                                                                                                                                                  |
-| Outros                  | Outras interfaces não especificadas, resultando em uma exceção para dispositivos inválidos.                                                                                                                                                                                                                           | Se nenhuma das interfaces especificadas for encontrada no dispositivo, uma exceção é lançada indicando que o dispositivo é inválido.                                                                                                                                                                 |
     
 Using file `config.json` for configuration for one or multiple serial ports: 
  
 Example two serial ports: 
 ```json
 {
+  "server_mqtt": {
+    "username": "username",
+    "password": "password",
+    "server": "url",
+    "port": 1883,
+    "subscribe": "my_topic" 
+  },
   "devices": [
     {
       "serialport": "/dev/serial/by-path/pci-0000:00:14.0-usb-0:2:1.0",
       "baudrate": 115200,
       "timeout": 5,
       "description": "Arduino",
-      "interface": "serial"
+      "interface": "serial-to-file"
     },
     {
       "serialport": "/dev/serial/by-path/pci-0000:00:14.0-usb-0:1:1.0-port0",
       "baudrate": 115200,
       "timeout": 5,
       "description": "NodeMCU",
-      "interface": "serial"
+      "interface": "serial-to-file"
     },
     {
       "address": "54:43:B2:8A:11:26",
@@ -99,10 +107,16 @@ Example two serial ports:
       "samplingSeconds": 1,
       "description": "Logs from BLE",
       "interface": "bluetooth-BLE"
+    },
+    {
+      "serialport": "/dev/serial/by-id/usb-Silicon_Labs_CP2104_USB_to_UART_Bridge_Controller_01B970A5-if00-port0",
+      "baudrate": 115200,
+      "timeout": 5,
+      "description": "Emulate-payload",
+      "interface": "serial-to-mqtt"
     }
   ]
 }
-
 ```
 
 > Note: To commit a new [config.json](config.json) file as example execute: `git update-index --no-assume-unchanged config.json`, commit changes and execute again: `git update-index --assume-unchanged config.json`

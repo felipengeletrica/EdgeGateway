@@ -56,7 +56,7 @@ def init_data_instances(datajson):
         for index in range(0, len(devices)):
             print(f"Devices:{devices[index]['description']} Interface:{devices[index]['interface']}")
 
-            if "serial" == devices[index]['interface']:
+            if "serial-to-file" == devices[index]['interface']:
                 devs.append(
                     SerialToFile(
                         description=devices[index]['description'])
