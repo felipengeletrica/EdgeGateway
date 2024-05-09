@@ -168,7 +168,7 @@ class SerialToMQTT(threading.Thread):
                         json_obj = json.loads(data)
                         # Add metadata with timestamp
                         metadata = {"timestamp": str(datetime.datetime.now())}
-                        payload = {"metadata": metadata, "payload": json_obj}
+                        payload = {"gateway_meta": metadata, "data": json_obj}
                         payload_dumps = json.dumps(payload)
                         self.mqtt_manager.publish(self.subscribe, payload_dumps)
                         if debug is True:
