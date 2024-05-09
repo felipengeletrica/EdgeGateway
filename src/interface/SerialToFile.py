@@ -1,25 +1,26 @@
 #!/usr/bin/env python
-#-*- coding: latin-1 -*-
+# -*- coding: latin-1 -*-
 
 import serial
 import time
 import datetime
 import threading
-import re
+from src.storage.Dataanalysis import DataAnalysis
 
 
 debug = False
 
-from src.storage.Dataanalysis import DataAnalysis
-
-
-class logger(threading.Thread):
+class SerialToFile(threading.Thread):
+    """
+    Class for logging data from serial port to a file.
+    """
 
     def __init__(self, description):
-
         """
-        :type description: Name logger in test
-        :type database: database
+        Constructor for SerialToFile.
+
+        :param description: Name SerialToFile in test
+        :type description: str
         """
 
         try:
@@ -37,14 +38,16 @@ class logger(threading.Thread):
             raise
 
     def run(self, port, baudrate, timeout):
+        """
+        Start thread for data processpath.
 
+        :param port: serial port connection ex. /dev/ttyUSB
+        :type port: str
+        :param baudrate: 115200
+        :type baudrate: int
+        :param timeout: time for response
+        :type timeout: int
         """
-        Start thread for data processpath
-        :type port: serial port conection ex. /dev/ttyUSB
-        :type baudrate: 115200
-        :type timeout: time for response
-        """
-        #print "Starting " + self.name
         self.baudrate = baudrate
         self.port = port
         self.timeout = timeout
@@ -54,7 +57,9 @@ class logger(threading.Thread):
         p.start()
 
     def _process(self):
-
+        """
+        Internal method for processing data.
+        """
         while True:
             try:
                 if self.serialstate() is False:
@@ -69,7 +74,20 @@ class logger(threading.Thread):
             time.sleep(1)
 
     def connect(self, port, baudrate, timeout, rtscts=False, dsrdtr=False):
+        """
+        Connect to a serial port.
 
+        :param port: serial port connection ex. /dev/ttyUSB
+        :type port: str
+        :param baudrate: 115200
+        :type baudrate: int
+        :param timeout: time for response
+        :type timeout: int
+        :param rtscts: Enable RTS/CTS flow control (default False)
+        :type rtscts: bool
+        :param dsrdtr: Enable DSR/DTR flow control (default False)
+        :type dsrdtr: bool
+        """
         try:
             self.baudrate = baudrate
             self.port = port
@@ -89,7 +107,9 @@ class logger(threading.Thread):
             raise
 
     def disconnect(self):
-
+        """
+        Disconnect from the serial port.
+        """
         try:
             if self.connState is True:
                 self.s = None
@@ -99,10 +119,15 @@ class logger(threading.Thread):
             raise
 
     def serialstate(self):
+        """
+        Check the state of the serial connection.
+        """
         return self.connState
 
     def receivedata(self):
-
+        """
+        Receive data from the serial port and process it.
+        """
         header = "[" + self.description + " ] "
 
         dataanalysis = DataAnalysis()
@@ -116,7 +141,6 @@ class logger(threading.Thread):
                 if len(data):
 
                     log = data.strip()
-
                     if debug is True:
                         print(log + '[' + str(datetime.datetime.now()) + ']')
 
