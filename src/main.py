@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 script_path = os.path.dirname(os.path.abspath(__file__))
 parent_path = os.path.abspath(os.path.join(script_path, os.pardir))
 
-from src.interface.SerialLogger import logger
+from src.interface.SerialToFile import SerialToFile
 from src.interface.SerialToMQTT import SerialToMQTT
 from src.interface.BluetoothGpsAgrinavi import BluetoothGpsAgrinavi
 from src.interface.BLEConnector import BLEConnector
@@ -58,7 +58,7 @@ def init_data_instances(datajson):
 
             if "serial" == devices[index]['interface']:
                 devs.append(
-                    logger(
+                    SerialToFile(
                         description=devices[index]['description'])
                 )
                 devs[index].run(

@@ -26,7 +26,7 @@ class SerialToMQTT(threading.Thread):
         """
         Initialize SerialToMQTT instance.
 
-        :param description: Name logger in test
+        :param description: Name SerialToFile in test
         :type description: str
         :param server_mqtt: MQTT server configuration
         :type server_mqtt: dict
