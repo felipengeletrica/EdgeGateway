@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding=utf-8
 """
-    MQTT Manager
+MQTT Manager
 """
 
 # region import
@@ -24,7 +24,20 @@ class MqttManager(threading.Thread):
         subscribe: str
     ):
         """
-        Instance MQTT connections
+        Initialize MQTT Manager instance.
+
+        :param username: MQTT broker username
+        :type username: str
+        :param password: MQTT broker password
+        :type password: str
+        :param server: MQTT broker server address
+        :type server: str
+        :param port: MQTT broker port
+        :type port: int
+        :param client: MQTT client identifier
+        :type client: str
+        :param subscribe: Topic to subscribe to
+        :type subscribe: str
         """
         threading.Thread.__init__(self)
         self.server = server
@@ -38,8 +51,7 @@ class MqttManager(threading.Thread):
 
     def _start(self):
         """
-        Start process mqtt manager
-        :rtype: object
+        Start process for MQTT manager.
         """
         print(f"Server: {self.server} Port: {self.port}")
         self.client.on_connect = self.on_connect
@@ -66,10 +78,14 @@ class MqttManager(threading.Thread):
 
     def publish(self, topic, payload):
         """
-        Publish message in broker
+        Publish message in broker.
+
         :param topic: Topic
+        :type topic: str
         :param payload: Payload
-        :return:
+        :type payload: str
+        :return: Result code and message ID
+        :rtype: tuple
         """
 
         (rc, mid) = (-1, -1)
@@ -90,10 +106,15 @@ class MqttManager(threading.Thread):
     def on_connect(self, client, userdata, flags, rc):
         """
         The callback for when the client receives a CONNACK response from the server.
+
         :param client: Client
+        :type client: paho.mqtt.client.Client
         :param userdata: Userdata
-        :param flags: flags
-        :param rc: rc
+        :type userdata: object
+        :param flags: Flags
+        :type flags: dict
+        :param rc: Result code
+        :type rc: int
         """
         try:
             print(f"Connected with result code {str(rc)}")
@@ -106,17 +127,21 @@ class MqttManager(threading.Thread):
     def on_message(self, client, userdata, msg):
         """
         The callback for when a PUBLISH message is received from the server.
+
         :param client: Client
+        :type client: paho.mqtt.client.Client
         :param userdata: User data
-        :param msg: msg
+        :type userdata: object
+        :param msg: Message
+        :type msg: paho.mqtt.client.MQTTMessage
         """
         content = json.loads(msg.payload)
-        #if self.on_message_callback:
-        #    self.on_message_callback(content)  # Chama a função de callback com o conteúdo da mensagem
+        # if self.on_message_callback:
+        #     self.on_message_callback(content)  # Chama a função de callback com o conteúdo da mensagem
 
     def stop(self):
         """
-        Stop process
+        Stop the MQTT client.
         """
         print("Stop mqtt client")
         self.client.loop_stop()
@@ -124,7 +149,7 @@ class MqttManager(threading.Thread):
 
     def run(self):
         """
-        Run process
+        Run the MQTT manager.
         """
         self.thread.daemon = True
         self.thread.start()

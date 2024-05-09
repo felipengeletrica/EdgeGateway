@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding=utf-8
 """
-    Main program for datalogger interface
+Main program for datalogger interface
 """
 
 # region import
@@ -20,15 +20,19 @@ from src.interface.SerialToMQTT import SerialToMQTT
 from src.interface.BluetoothGpsAgrinavi import BluetoothGpsAgrinavi
 from src.interface.BLEConnector import BLEConnector
 
-
 # endregion
 
+
 def LoadJSON():
+    """
+    Load JSON configurations from file.
+
+    :return: Loaded JSON data
+    :rtype: dict
+    """
     try:
-        # Load configurations using file JSON
         with open(parent_path + '/config.json') as json_data_file:
             data = json.load(json_data_file)
-
     except Exception as error:
         print("Fail in open JSON File")
         raise error
@@ -38,37 +42,31 @@ def LoadJSON():
 
 def init_data_instances(datajson):
     """
-        Load file of configuration and start multiples instances serial datalooger
+    Load file of configuration and start multiple instances of serial datalogger.
+
+    :param datajson: JSON data containing configurations
+    :type datajson: dict
     """
-
     try:
-
-        # After JSON LOAD
         devices = datajson['devices']
-
         timestamp = str(datetime.datetime.now())
         print(f"Start Server Logging {timestamp}")
-
         devs = list()
 
-        # Create threads for instances in datalogger
         for index in range(0, len(devices)):
             print(f"Devices:{devices[index]['description']} Interface:{devices[index]['interface']}")
 
-            # Serial Interface
             if "serial" == devices[index]['interface']:
                 devs.append(
                     logger(
                         description=devices[index]['description'])
                 )
-                # Execute process
                 devs[index].run(
                     port=devices[index]['serialport'],
                     baudrate=devices[index]['baudrate'],
                     timeout=devices[index]['timeout'])
 
             elif "serial-to-mqtt" == devices[index]['interface']:
-
                 server_mqtt = datajson["server_mqtt"]
                 if server_mqtt is None:
                     Exception("Server MQTT not configured")
@@ -78,13 +76,11 @@ def init_data_instances(datajson):
                         description=devices[index]['description'],
                         server_mqtt=server_mqtt)
                 )
-                # Execute process
                 devs[index].run(
                     port=devices[index]['serialport'],
                     baudrate=devices[index]['baudrate'],
                     timeout=devices[index]['timeout'])
 
-            # Bluetooth interface
             elif "bluetooth-gps" == devices[index]['interface']:
                 devs.append(
                     BluetoothGpsAgrinavi(
@@ -95,9 +91,7 @@ def init_data_instances(datajson):
                     address=devices[index]['address']
                 )
 
-            # Bluetooth BLE interface
             elif "bluetooth-BLE" == devices[index]['interface']:
-
                 devs.append(
                     BLEConnector(
                         device_name=devices[index]['description']
@@ -114,15 +108,16 @@ def init_data_instances(datajson):
 
 
 def main():
+    """
+    Main function to start the datalogger program.
+    """
     print("###############  Server Tests ########################")
     data_json = LoadJSON()
 
     init_data_instances(data_json)
 
     while True:
-
         try:
-
             keepAliveTimestamp = str(datetime.datetime.now())
             print(f"Keep Alive Datalogger {keepAliveTimestamp} \n\r")
             time.sleep(10)

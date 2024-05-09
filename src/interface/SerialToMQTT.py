@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding: latin-1 -*-
+# -*- coding: latin-1 -*-
 
 import serial
 import time
@@ -24,8 +24,12 @@ class SerialToMQTT(threading.Thread):
     def __init__(self, description, server_mqtt):
 
         """
-        :type description: Name logger in test
-        :type database: database
+        Initialize SerialToMQTT instance.
+
+        :param description: Name logger in test
+        :type description: str
+        :param server_mqtt: MQTT server configuration
+        :type server_mqtt: dict
         """
 
         try:
@@ -39,7 +43,7 @@ class SerialToMQTT(threading.Thread):
             self.connState = False
             self.description = description
 
-            # Criar uma instância de MqttManager com a função de callback
+            # Create an instance of MqttManager with the callback function
             self.mqtt_manager = MqttManager(
                 username=server_mqtt['username'],
                 password=server_mqtt['password'],
@@ -56,10 +60,14 @@ class SerialToMQTT(threading.Thread):
     def run(self, port, baudrate, timeout):
 
         """
-        Start thread for data processpath
-        :type port: serial port conection ex. /dev/ttyUSB
-        :type baudrate: 115200
-        :type timeout: time for response
+        Start thread for data processpath.
+
+        :param port: Serial port connection, e.g., /dev/ttyUSB
+        :type port: str
+        :param baudrate: Baud rate, e.g., 115200
+        :type baudrate: int
+        :param timeout: Time for response
+        :type timeout: int
         """
         #print "Starting " + self.name
         self.baudrate = baudrate
@@ -71,6 +79,10 @@ class SerialToMQTT(threading.Thread):
         p.start()
 
     def _process(self):
+
+        """
+        Internal method for processing data.
+        """
 
         while True:
             try:
@@ -86,6 +98,21 @@ class SerialToMQTT(threading.Thread):
             time.sleep(1)
 
     def connect(self, port, baudrate, timeout, rtscts=False, dsrdtr=False):
+
+        """
+        Connect to a serial port.
+
+        :param port: Serial port connection, e.g., /dev/ttyUSB
+        :type port: str
+        :param baudrate: Baud rate, e.g., 115200
+        :type baudrate: int
+        :param timeout: Time for response
+        :type timeout: int
+        :param rtscts: Enable RTS/CTS flow control (default False)
+        :type rtscts: bool
+        :param dsrdtr: Enable DSR/DTR flow control (default False)
+        :type dsrdtr: bool
+        """
 
         try:
             self.baudrate = baudrate
@@ -107,6 +134,10 @@ class SerialToMQTT(threading.Thread):
 
     def disconnect(self):
 
+        """
+        Disconnect from the serial port.
+        """
+
         try:
             if self.connState is True:
                 self.s = None
@@ -116,9 +147,16 @@ class SerialToMQTT(threading.Thread):
             raise
 
     def serialstate(self):
+        """
+        Check the state of the serial connection.
+        """
         return self.connState
 
     def receivedata(self):
+
+        """
+        Receive data from the serial port and publish it to MQTT.
+        """
 
         while True:
             try:
