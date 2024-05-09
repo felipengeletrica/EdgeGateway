@@ -37,9 +37,7 @@ To install the app as a service, just run:
 ```bash
 cd services && sudo ./install.sh
 ```
-
-## ⚙️ Configuring
-
+***
 To find the tty port associated with your microcontroller using the `ls /dev/serial/by-path` command, follow these steps:
 
 1. Connect your microcontroller to the computer via the serial port;
@@ -123,6 +121,28 @@ Example two serial ports:
 
 > Note: The capacity of the data logger depends only on the CPU and disk IO speeds! 
 
+##
+
+##  👷 Development
+
+Install pre-commit for automatic code verifications
+
+```bash 
+pip install pre-commit
+```
+
+```bash 
+pre-commit --version
+```
+
+Install the git hook scripts
+
+```bash 
+pre-commit install
+```
+
+
+***
 ## 🧪 Testing
 
 If you're looking to run a program to send data via serial to your microcontroller, check out the [`example/arduino`](example/arduino) directory in this repository. You'll find a simple **PlatformIO** project that provides tests for sending data over serial communication with an Arduino microcontroller. Simply navigate to the [`example/arduino`](example/arduino) directory in this repository and run the project with **PlatformIO** to get started.
