@@ -35,8 +35,23 @@ python src/main.py
 ## 💻 Install as a service
 To install the app as a service, just run:
 ```bash
-cd services && sudo ./install.sh
+cd services && sudo chmod +x install.sh && sudo ./install.sh
 ```
+
+Verify service in realtime
+
+```bash
+journalctl -u datalogger.service -f
+```
+
+Uninstalling 
+
+```bash
+sudo ./uninstall.sh
+```
+
+
+
 ***
 To find the tty port associated with your microcontroller using the `ls /dev/serial/by-path` command, follow these steps:
 
@@ -133,6 +148,10 @@ pip install pre-commit
 
 ```bash 
 pre-commit --version
+```
+
+```bash 
+pre-commit run --all-files
 ```
 
 Install the git hook scripts
