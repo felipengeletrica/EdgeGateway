@@ -121,7 +121,7 @@ Example two serial ports:
 
 > Note: The capacity of the data logger depends only on the CPU and disk IO speeds! 
 
-##
+***
 
 ##  👷 Development
 
@@ -141,7 +141,6 @@ Install the git hook scripts
 pre-commit install
 ```
 
-
 ***
 ## 🧪 Testing
 
@@ -155,7 +154,9 @@ If you are not running "pybluez", install the following dependencies:
 ```bash 
 sudo apt-get install bluetooth libbluetooth-dev
 ```
-For scan devices:
+For scan bluetooth devices:
 
+```bash 
 bluetoothctl
+```
 

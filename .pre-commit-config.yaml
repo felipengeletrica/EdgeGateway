@@ -1,29 +1,29 @@
 repos:
-  - repo: https://github.com/pre-commit/mirrors-flake8
+  - repo: git://github.com/pre-commit/mirrors-flake8
     rev: v4.0.1
     hooks:
       - id: flake8
         additional_dependencies: [flake8==4.0.1]
 
-  - repo: https://github.com/psf/black
+  - repo: git://github.com/psf/black
     rev: 22.1.0
     hooks:
       - id: black
         additional_dependencies: [black==22.1.0]
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
+  - repo: git://github.com/pre-commit/mirrors-mypy
     rev: v0.910
     hooks:
       - id: mypy
         additional_dependencies: [mypy==0.910]
 
-  - repo: https://github.com/PyCQA/pydocstyle
+  - repo: git://github.com/PyCQA/pydocstyle
     rev: 8.1.1
     hooks:
       - id: pydocstyle
         additional_dependencies: [pydocstyle==8.1.1]
 
-  - repo: https://github.com/pre-commit/pre-commit-hooks
+  - repo: git://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
     hooks:
       - id: check-yaml
