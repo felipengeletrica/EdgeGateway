@@ -123,7 +123,9 @@ class SerialToMQTT(threading.Thread):
         while True:
             try:
                 data = self.s.readline().decode()
-                if len(data):
+                # First verification json
+                if len(data) and "{" in data and ":" in data:
+                    # try parse to json to validate
                     try:
                         json_obj = json.loads(data)
                         self.mqtt_manager.publish(self.subscribe, data)
