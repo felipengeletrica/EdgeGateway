@@ -166,9 +166,13 @@ class SerialToMQTT(threading.Thread):
                     # try parse to json to validate
                     try:
                         json_obj = json.loads(data)
-                        self.mqtt_manager.publish(self.subscribe, data)
+                        # Add metadata with timestamp
+                        metadata = {"timestamp": str(datetime.datetime.now())}
+                        payload = {"metadata": metadata, "payload": json_obj}
+                        payload_dumps = json.dumps(payload)
+                        self.mqtt_manager.publish(self.subscribe, payload_dumps)
                         if debug is True:
-                            print(f'{json_obj} [{str(datetime.datetime.now())}]')
+                            print(f'{payload_dumps} [{str(datetime.datetime.now())}]')
                     except json.JSONDecodeError:
                         print("Invalid json")
                         raise
