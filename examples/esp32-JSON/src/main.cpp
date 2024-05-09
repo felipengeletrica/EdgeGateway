@@ -85,5 +85,7 @@ void loop() {
 
   // Delay for 1 second
   delay(1000);
+  Serial.println("Invalid data this not is json");
+  delay(20);
 
 }
