@@ -3,6 +3,10 @@
 
 /* CONSTANTS */
 #define BUFFER_JSON 2048
+#define UUID                            \
+  String((uint32_t)ESP.getEfuseMac()) + \
+      String((uint32_t)(ESP.getEfuseMac() >> 32))
+#define DEVICE_ID String("DEVICE_SAMPLE")
 /* VARIABLES */
 uint64_t uptime = 0;
 
@@ -25,8 +29,8 @@ void loop() {
   DynamicJsonDocument doc(BUFFER_JSON);
 
   // Fill JSON object with data
-  doc["device_id"] = "device_id_value";
-  doc["serial"] = "serial_number";
+  doc["device_id"] = DEVICE_ID;
+  doc["serial"] = UUID;
   doc["protocol_id"] = "0.1.0";
   doc["hw_ver"] = "hardware_version";
   doc["fw_ver"] = "firmware_version";
