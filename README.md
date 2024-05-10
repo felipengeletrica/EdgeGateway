@@ -15,14 +15,13 @@ To find the tty port associated with your microcontroller using the `ls /dev/ser
 
 > By using this path to access the serial device instead of the port number (e.g., `/dev/ttyACM0`), the operating system will always point to the correct device, regardless of how many times the microcontroller is disconnected and reconnected.
 
-| Interface          | Description                                                       | Configuration Example                                                   | Implementations Status  |
-|--------------------|-------------------------------------------------------------------|-------------------------------------------------------------------------|-------------------------|
-| Serial-to-File     | Serial communication interface for saving data locally.            | ```json { "serialport": "...", "baudrate": 115200, "timeout": 5, ... }``` | Implemented             |
-| Serial-to-MQTT     | Converts serial data to MQTT messages. **MQTT setup is mandatory.**| ```json { "server_mqtt": { "username": "...", "password": "...", "server": "...", "port": 1883, "subscribe-upstream": "...", "subscribe-downstream": "..." } }``` | Implemented             |
-| Bluetooth-GPS      | Connects GPS devices via Bluetooth.                                | ```json { "address": "...", "port": 1, "samplingSeconds": 1, ... }```     | Implemented             |
-| Bluetooth-BLE      | Connects BLE devices via Bluetooth Low Energy.                     | ```json { "address": "...", "port": 1, "samplingSeconds": 1, ... }```     | Implemented                 |
-| Others             | Unspecified interfaces causing exceptions for invalid devices.      | No specific configuration example provided.                               | Implemented             |
-
+| Interface          | Description                                                       | Configuration Example                                                   | Communication Directions | Implementations Status  |
+|--------------------|-------------------------------------------------------------------|-------------------------------------------------------------------------|-------------------------|-------------------------|
+| Serial-to-File     | Serial communication interface for saving data locally.            | ```json { "serialport": "...", "baudrate": 115200, "timeout": 5, ... }``` | Unidirecional          | Implemented             |
+| Serial-to-MQTT     | Converts serial data to MQTT messages. **MQTT setup is mandatory.**| ```json { "server_mqtt": { "username": "...", "password": "...", "server": "...", "port": 1883, "subscribe-upstream": "...", "subscribe-downstream": "..." } }``` | Bidirecional            | Implemented             |
+| Bluetooth-GPS      | Connects GPS devices via Bluetooth.                                | ```json { "address": "...", "port": 1, "samplingSeconds": 1, ... }```     | Unidirecional          | Implemented             |
+| Bluetooth-BLE      | Connects BLE devices via Bluetooth Low Energy.                     | ```json { "address": "...", "port": 1, "samplingSeconds": 1, ... }```     | Unidirecional          | Implemented                 |
+| Others             | Unspecified interfaces causing exceptions for invalid devices.      | No specific configuration example provided.                               | Unidirecional          | Implemented             |
 
 Using file `config.json` for configuration for one or multiple serial ports: 
  
