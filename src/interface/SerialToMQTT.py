@@ -35,7 +35,7 @@ class SerialToMQTT(threading.Thread):
         try:
             threading.Thread.__init__(self)
 
-            print("New instance logging"), description
+            print("New instance gateway SERIAL <-> MQTT"), description
             self.s = None
             self.baudrate = None
             self.port = None
@@ -50,9 +50,11 @@ class SerialToMQTT(threading.Thread):
                 server=server_mqtt['server'],
                 port=server_mqtt['port'],
                 client='client1',
-                subscribe=server_mqtt['subscribe'])
+                subscribe_upstream=server_mqtt['subscribe-upstream'],
+                subscribe_downstream=server_mqtt['subscribe-downstream'])
 
-            self.subscribe = server_mqtt['subscribe']
+            self.subscribe_upstream = server_mqtt['subscribe-upstream']
+            self.subscribe_downstream = server_mqtt['subscribe-downstream']
 
         except:
             raise
@@ -170,7 +172,7 @@ class SerialToMQTT(threading.Thread):
                         metadata = {"timestamp": str(datetime.datetime.now())}
                         payload = {"gateway_meta": metadata, "data": json_obj}
                         payload_dumps = json.dumps(payload)
-                        self.mqtt_manager.publish(self.subscribe, payload_dumps)
+                        self.mqtt_manager.publish(self.subscribe_upstream, payload_dumps)
                         if debug is True:
                             print(f'{payload_dumps} [{str(datetime.datetime.now())}]')
                     except json.JSONDecodeError:

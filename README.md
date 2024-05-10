@@ -35,7 +35,8 @@ Example multiples interfaces and serial ports:
     "password": "password",
     "server": "url",
     "port": 1883,
-    "subscribe": "my_topic" 
+    "subscribe-upstream": "topic/to/send/data",
+    "subscribe-downstream": "topic/to/receive/data"
   },
   "devices": [
     {

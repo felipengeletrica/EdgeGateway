@@ -21,7 +21,8 @@ class MqttManager(threading.Thread):
         server: str,
         port: int,
         client: str,
-        subscribe: str
+        subscribe_upstream: str,
+        subscribe_downstream: str,
     ):
         """
         Initialize MQTT Manager instance.
@@ -43,7 +44,8 @@ class MqttManager(threading.Thread):
         self.server = server
         self.port = port
         self.client = mqtt.Client(client)
-        self.__subscribe = subscribe
+        self.__subscribe_upstream = subscribe_upstream
+        self.__subscribe_downstream = subscribe_downstream
         self.client.username_pw_set(username=username, password=password)
         self.thread = threading.Thread(target=self._start)
         self.status = False
@@ -120,7 +122,7 @@ class MqttManager(threading.Thread):
             print(f"Connected with result code {str(rc)}")
             # Subscribing in on_connect() means that if we lose the connection and
             # reconnect then subscriptions will be renewed.
-            client.subscribe(self.__subscribe)
+            client.subscribe(self.__subscribe_downstream)
         except Exception as error:
             print(f"Fail  on connect error {error}")
 
