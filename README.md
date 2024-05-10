@@ -25,10 +25,9 @@ To find the tty port associated with your microcontroller using the `ls /dev/ser
 | Others             | Unspecified interfaces causing exceptions for invalid devices.      | No specific configuration example provided.                               | Not applicable          |
 
 
-    
 Using file `config.json` for configuration for one or multiple serial ports: 
  
-Example two serial ports: 
+Example multiples interfaces and serial ports: 
 ```json
 {
   "server_mqtt": {
