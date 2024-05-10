@@ -51,7 +51,8 @@ class SerialToMQTT(threading.Thread):
                 port=server_mqtt['port'],
                 client='client1',
                 subscribe_upstream=server_mqtt['subscribe-upstream'],
-                subscribe_downstream=server_mqtt['subscribe-downstream'])
+                subscribe_downstream=server_mqtt['subscribe-downstream'],
+                on_message_callback=self.senddata)
 
             self.subscribe_upstream = server_mqtt['subscribe-upstream']
             self.subscribe_downstream = server_mqtt['subscribe-downstream']
@@ -182,3 +183,18 @@ class SerialToMQTT(threading.Thread):
                 self.connState = False
                 print("exception data: ", error)
                 raise
+
+    def senddata(self, message_content):
+        """
+        Send data via serial and print the message content.
+        """
+        try:
+            if self.serialstate():
+                message_str = json.dumps(message_content)
+                self.s.write(message_str.encode())
+                print("Sent via serial:", message_str)
+            else:
+                print("Serial connection is not open.")
+        except Exception as error:
+            print("Error sending data via serial:", error)
+
