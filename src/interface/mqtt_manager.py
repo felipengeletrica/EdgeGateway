@@ -3,26 +3,28 @@
 """
 MQTT Manager
 """
-
+import logging
 # region import
 import threading
 import time
 import paho.mqtt.client as mqtt
 import json
 
+
 # endregion
 
 
 class MqttManager(threading.Thread):
     def __init__(
-        self,
-        username: str,
-        password: str,
-        server: str,
-        port: int,
-        client: str,
-        subscribe_upstream: str,
-        subscribe_downstream: str,
+            self,
+            username: str,
+            password: str,
+            server: str,
+            port: int,
+            client: str,
+            subscribe_upstream: str,
+            subscribe_downstream: str,
+            on_message_callback=None,
     ):
         """
         Initialize MQTT Manager instance.
@@ -50,6 +52,7 @@ class MqttManager(threading.Thread):
         self.thread = threading.Thread(target=self._start)
         self.status = False
         self.retry = 3
+        self.on_message_callback = on_message_callback
 
     def _start(self):
         """
@@ -138,8 +141,8 @@ class MqttManager(threading.Thread):
         :type msg: paho.mqtt.client.MQTTMessage
         """
         content = json.loads(msg.payload)
-        # if self.on_message_callback:
-        #     self.on_message_callback(content)  # Chama a função de callback com o conteúdo da mensagem
+        if self.on_message_callback:
+            self.on_message_callback(content)  # Chama a função de callback com o conteúdo da mensagem
 
     def stop(self):
         """
