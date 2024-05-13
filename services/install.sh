@@ -6,6 +6,14 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 
+# Install dependencies
+echo "Install dependencies"
+sudo apt-get install libcairo2-dev libjpeg-dev libgif-dev
+sudo apt-get install cmake
+sudo apt-get install libgirepository1.0-dev
+sudo apt-get install libdbus-1-dev
+sudo apt-get install bluetooth libbluetooth-dev
+
 # Check if directory exists
 DIR="/usr/bin/datalogger"
 if [ ! -d "$DIR" ]; then
