@@ -12,7 +12,7 @@ graph LR
 
         subgraph Linux Systems Operarating
             datalogger([Process Worker's])-->server
-            datalogger([Process Worker's])--> files[(files)]
+            datalogger([Process Worker's])--> files[(logs files)]
             ConfigFile[(Config. file)] --> datalogger([Process Worker's])
             server([MQTT NETWORK \n Interface])-->internet
             internet([internet])
