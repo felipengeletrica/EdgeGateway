@@ -1,4 +1,4 @@
-# 🐍 Python Datalogger and MQTT gateway debugging embedded systems and outhers
+# 🐍 EDGE computing for gateway devices MQTT for testes, productions and debugging embedded systems and outhers
   
 Like ESP WIFI modules, microcontrollers, Linux serial console etc.
 
