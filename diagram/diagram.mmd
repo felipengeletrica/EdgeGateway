@@ -13,6 +13,7 @@ graph LR
         subgraph Linux Systems
             datalogger([Process Worker's])-->server
             datalogger([Process Worker's])--> files[(files)]
+            ConfigFile[(Config. file)] --> datalogger([Process Worker's])
             server([MQTT NETWORK \n Interface])-->internet
             internet([internet])
 
@@ -37,3 +38,5 @@ graph LR
             brocker((iot-pos-processing))
         end
     end
+
+    
