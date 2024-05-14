@@ -10,7 +10,7 @@ graph LR
     subgraph Solution
         direction LR
 
-        subgraph Linux Systems
+        subgraph Linux Systems Operarating
             datalogger([Process Worker's])-->server
             datalogger([Process Worker's])--> files[(files)]
             ConfigFile[(Config. file)] --> datalogger([Process Worker's])
@@ -20,10 +20,12 @@ graph LR
             subgraph Interface
                 USB1
                 USB2
+                USBn
                 BLUETOOTH
             end
-            USB1>USB1] --> datalogger
-            USB2>USB2] --> datalogger
+            USB1>USB1] ---> datalogger
+            USB2>USB2] ---> datalogger
+            USBn>USBn] ---> datalogger
             BLUETOOTH>BLUETOOTH] --> datalogger
         end
 
@@ -31,11 +33,12 @@ graph LR
             s1[Sensor 1] --> USB1
             s2[Sensor 2] --> USB2
             s3[Sensor 3] --> BLUETOOTH
+            s4[Sensor 4] --> USBn
         end
 
         internet --> brocker
         subgraph Cloud processing 
-            brocker((iot-pos-processing))
+            brocker((brocker))
         end
     end
 
