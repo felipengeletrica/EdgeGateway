@@ -1,37 +1,29 @@
 graph LR
     subgraph Legenda
         hardware[Hardware]
-        interface>Interfaces]
-        file[(Arquivos)]
-        services([Serviços])
+        interface>Interface]
+        file[(Local Storage)]
+        services([Services])
         program((Programa))
     end
 
-    subgraph Solução
+    subgraph Solution
         direction LR
 
-        subgraph PFI-Hardware
-            circuit[Detector de energia]
-        end
-
-        subgraph Raspberry PI
-            datalogger([Datalogger])-->files
-            files[(files)]-->server
-            server([Web File Server])-->hotspot
-            hotspot([Hotspot])
+        subgraph Linux Systems
+            datalogger([Process Worker's])-->server
+            datalogger([Process Worker's])--> files[(files)]
+            server([MQTT NETWORK \n Interface])-->internet
+            internet([internet])
 
             subgraph Interface
                 USB1
                 USB2
                 BLUETOOTH
-                GPIO
             end
-            circuit --> GPIO
             USB1>USB1] --> datalogger
             USB2>USB2] --> datalogger
             BLUETOOTH>BLUETOOTH] --> datalogger
-            
-            GPIO>GPIO] --> service-pfi([Power Fail service])
         end
 
         subgraph Sensores
@@ -40,8 +32,8 @@ graph LR
             s3[Sensor 3] --> BLUETOOTH
         end
 
-        hotspot --> iot-pos-processing
-        subgraph Pós processamento
-            iot-pos-processing((iot-pos-processing))
+        internet --> brocker
+        subgraph Cloud processing 
+            brocker((iot-pos-processing))
         end
     end
