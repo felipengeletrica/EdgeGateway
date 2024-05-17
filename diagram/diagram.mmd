@@ -1,0 +1,42 @@
+graph LR
+    subgraph Legenda
+        hardware[Hardware]
+        interface>Interface]
+        file[(Local Storage)]
+        services([Services])
+        program((Programa))
+    end
+
+    subgraph System
+        direction LR
+
+        subgraph EDGE Gateway
+            ConfigFile[(Config. file)] -->|Configuração| datalogger([Process Worker's])
+            datalogger([Process Worker's])<--> server([MQTT NETWORK \n Interface])
+            datalogger([Process Worker's])--> |Armazenamento| files[(logs files)]
+            server([MQTT NETWORK \n Interface])<-->|Comunicação| internet([internet])
+
+            subgraph Interface
+                USB1>USB1]
+                USB2>USB2]
+                USBn>USBn]
+                BLUETOOTH>BLUETOOTH]
+            end
+            USB1>USB1] <--->|Dados| datalogger
+            USB2>USB2] <--->|Dados| datalogger
+            USBn>USBn] <--->|Dados| datalogger
+            BLUETOOTH>BLUETOOTH] -->|Dados| datalogger
+        end
+
+        subgraph Sensores
+            s1[Sensor 1] <-->|Serial| USB1
+            s2[Sensor 2] <-->|Serial| USB2
+            s4[Sensor n] <-->|Serial| USBn
+            s3[Sensor BLE] -->|Bluetooth| BLUETOOTH
+        end
+
+        internet <-->|Comunicação| brocker((brocker))
+        subgraph Cloud processing 
+            brocker((brocker))
+        end
+    end

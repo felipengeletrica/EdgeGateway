@@ -190,11 +190,21 @@ class SerialToMQTT(threading.Thread):
         """
         try:
             if self.serialstate():
-                message_str = json.dumps(message_content)
-                self.s.write(message_str.encode())
-                print("Sent via serial:", message_str)
+                try:
+                    if isinstance(message_content, dict):
+                        if 'raw' in message_content:
+                            raw_value = message_content.get("raw")
+                            self.s.write(raw_value.encode())
+                            print(f"Message RAW via serial:{raw_value}")
+                        else:
+                            message_json = json.dumps(message_content)
+                            self.s.write(message_json.encode())
+                            print("Sent via serial:", message_content)
+                    else:
+                        print("message_content is not a dictionary.")
+                except Exception as error:
+                    print("Error sending data via serial:", error)
             else:
                 print("Serial connection is not open.")
         except Exception as error:
             print("Error sending data via serial:", error)
-

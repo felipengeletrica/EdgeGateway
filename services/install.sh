@@ -6,8 +6,8 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 
-# Install depedencies
-echo "Install depedencies"
+# Install dependencies
+echo "Install dependencies"
 sudo apt-get install libcairo2-dev libjpeg-dev libgif-dev
 sudo apt-get install cmake
 sudo apt-get install libgirepository1.0-dev
