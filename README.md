@@ -126,6 +126,11 @@ Verify service in realtime
 ```bash
 journalctl -u datalogger.service -f
 ```
+or last logs
+
+```bash
+journalctl --unit=datalogger.service -n 100 --no-pager
+```
 
 Uninstalling 
 
