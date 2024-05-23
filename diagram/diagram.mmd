@@ -4,17 +4,17 @@ graph LR
         interface>Interface]
         file[(Local Storage)]
         services([Services])
-        program((Programa))
+        program((Program))
     end
 
     subgraph System
         direction LR
 
         subgraph EDGE Gateway
-            ConfigFile[(Config. file)] -->|Configuração| datalogger([Process Worker's])
+            ConfigFile[(Config. file)] -->|Configurations| datalogger([Process Worker's])
             datalogger([Process Worker's])<--> server([MQTT NETWORK \n Interface])
-            datalogger([Process Worker's])--> |Armazenamento| files[(logs files)]
-            server([MQTT NETWORK \n Interface])<-->|Comunicação| internet([internet])
+            datalogger([Process Worker's])--> |Storage| files[(logs files)]
+            server([MQTT NETWORK \n Interface])<-->|Communications| internet([internet])
 
             subgraph Interface
                 USB1>USB1]
