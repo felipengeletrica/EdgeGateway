@@ -4,6 +4,8 @@ Like ESP WIFI modules, microcontrollers, Linux serial console etc.
 
 With this program it's possible to save logs from different serial ports just by [configuring the JSON file](#-configuring) (`config.json`), the number of ports and unlimited and each process for processing and saving the logs is with you on separate instances and threads.
 
+![alt](img/diagram.png)
+
 ## Setup config file
 
 To find the tty port associated with your microcontroller using the `ls /dev/serial/by-path` command, follow these steps:
