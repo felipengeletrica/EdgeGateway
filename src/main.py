@@ -19,7 +19,7 @@ from src.interface.SerialToFile import SerialToFile
 from src.interface.SerialToMQTT import SerialToMQTT
 from src.interface.BluetoothGpsAgrinavi import BluetoothGpsAgrinavi
 from src.interface.BLEConnector import BLEConnector
-from src.interface.BLEConnectorToMQTT import import BLEConnectorToMQTT
+from src.interface.BLEConnectorToMQTT import BLEConnectorToMQTT
 
 # endregion
 
@@ -107,7 +107,7 @@ def init_data_instances(datajson):
                     Exception("Server MQTT not configured")
 
                 devs.append(
-                    BLEConnector(
+                    BLEConnectorToMQTT(
                         device_name=devices[index]['description'],
                         server_mqtt=server_mqtt,
                         timeout=devices[index]['samplingSeconds'],
