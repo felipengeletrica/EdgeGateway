@@ -1,5 +1,6 @@
 [Unit]
-Description=Python Serial RS232 Datalogger for debugging embedded systems 
+Description=Edge Gateway - Platform for easy devices integrations
+After=serial-getty.target
 
 [Service]
 Environment=PYTHONUNBUFFERED=1
