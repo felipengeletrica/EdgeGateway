@@ -19,6 +19,7 @@ from src.interface.SerialToFile import SerialToFile
 from src.interface.SerialToMQTT import SerialToMQTT
 from src.interface.BluetoothGpsAgrinavi import BluetoothGpsAgrinavi
 from src.interface.BLEConnector import BLEConnector
+from src.interface.BLEConnectorToMQTT import BLEConnectorToMQTT
 
 # endregion
 
@@ -99,6 +100,21 @@ def init_data_instances(datajson):
                 )
                 devs[index].run(
                     mac_address=devices[index]['mac-address']
+                )
+            elif "bluetooth-BLE-to-mqtt" == devices[index]['interface']:
+                server_mqtt = datajson["server_mqtt"]
+                if server_mqtt is None:
+                    Exception("Server MQTT not configured")
+
+                devs.append(
+                    BLEConnectorToMQTT(
+                        device_name=devices[index]['description'],
+                        server_mqtt=server_mqtt,
+                        timeout=devices[index]['samplingSeconds'],
+                    )
+                )
+                devs[index].run(
+                    mac_address=devices[index]['address']
                 )
             else:
                 Exception("Invalid device")

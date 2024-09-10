@@ -21,6 +21,8 @@ To find the tty port associated with your microcontroller using the `ls /dev/ser
 |--------------------|-------------------------------------------------------------------|-------------------------------------------------------------------------|-------------------------|-------------------------|
 | Serial-to-File     | Serial communication interface for saving data locally.            | ```json { "serialport": "...", "baudrate": 115200, "timeout": 5, ... }``` | Unidirecional          | Implemented             |
 | Serial-to-MQTT     | Converts serial data to MQTT messages. **MQTT setup is mandatory.**| ```json { "server_mqtt": { "username": "...", "password": "...", "server": "...", "port": 1883, "subscribe-upstream": "...", "subscribe-downstream": "..." } }``` | Bidirecional            | Implemented             |
+| bluetooth-BLE-to-mqtt    | Converts serial data to MQTT messages. **MQTT setup is mandatory.**| ```json { "server_mqtt": { "username": "...", "password": "...", "server": "...", "port": 1883, "subscribe-upstream": "...", "subscribe-downstream": "..." } }``` | Bidirecional            | Implemented             |
+
 | Bluetooth-GPS      | Connects GPS devices via Bluetooth.                                | ```json { "address": "...", "port": 1, "samplingSeconds": 1, ... }```     | Unidirecional          | Implemented             |
 | Bluetooth-BLE      | Connects BLE devices via Bluetooth Low Energy.                     | ```json { "address": "...", "port": 1, "samplingSeconds": 1, ... }```     | Unidirecional          | Implemented                 |
 | Others             | Unspecified interfaces causing exceptions for invalid devices.      | No specific configuration example provided.                               | Unidirecional          | Implemented             |
@@ -80,7 +82,14 @@ Example multiples interfaces and serial ports:
       "timeout": 5,
       "description": "Emulate-payload",
       "interface": "serial-to-mqtt"
-    }
+    },
+    {
+        "address": "44:17:93:60:33:22",
+        "port": 1,
+        "samplingSeconds": 0.05,
+        "description": "Logs from BLE",
+        "interface": "bluetooth-BLE-to-mqtt"
+      }
   ]
 }
 ```
