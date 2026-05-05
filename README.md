@@ -1,77 +1,78 @@
 # EdgeGateway
 
-**EdgeGateway** é um gateway de telemetria em Python para coletar dados de dispositivos embarcados, sensores e interfaces de campo, padronizar as mensagens e encaminhar os dados para um broker MQTT ou para arquivos locais de log.
+**EdgeGateway** is a Python-based telemetry gateway designed to collect data from embedded devices, field sensors, and local communication interfaces, standardize telemetry messages, and forward them to an MQTT broker or local log files.
 
-O projeto foi pensado para cenários de IoT, instrumentação, testes de firmware, telemetria industrial, coleta em campo e depuração de dispositivos conectados por **Serial**, **Bluetooth**, **BLE** e **MQTT**.
+The project is intended for IoT deployments, instrumentation, firmware testing, industrial telemetry, field data acquisition, and debugging of devices connected through **Serial**, **Bluetooth**, **BLE**, and **MQTT**.
 
 ![Architecture diagram](./img/diagram.png)
 
 ---
 
-## Visão geral
+## Overview
 
-O EdgeGateway atua como uma camada intermediária entre dispositivos físicos e sistemas de supervisão, banco de dados, dashboards ou plataformas de IoT.
+EdgeGateway acts as an edge layer between physical devices and supervision systems, databases, dashboards, or IoT platforms.
 
-Ele permite que múltiplos dispositivos sejam configurados em um único arquivo `config.json`, criando uma instância independente para cada interface. Cada instância roda em thread separada, permitindo coleta paralela de dados de várias portas seriais, dispositivos BLE ou GPS Bluetooth.
+Multiple devices can be configured in a single `config.json` file. For each device, the gateway creates an independent interface instance running in a separate thread, allowing parallel data collection from several serial ports, BLE devices, or Bluetooth GPS modules.
 
-Fluxo principal de telemetria:
+Main telemetry flow:
 
 ```text
 Sensor / MCU / Device
         |
-        | Serial, BLE ou Bluetooth
+        | Serial, BLE, or Bluetooth
         v
 EdgeGateway
         |
-        | JSON validado + metadados do gateway
+        | Validated JSON + gateway metadata
         v
-MQTT Broker / File Server / Plataforma IoT
+MQTT Broker / File Server / IoT Platform
         |
         v
-Dashboards, banco de dados, alarmes e integrações
+Dashboards, databases, alarms, and integrations
 ```
 
 ---
 
-## Objetivo do projeto
+## Project purpose
 
-O objetivo é simplificar a coleta de telemetria de dispositivos embarcados sem obrigar cada firmware a implementar toda a pilha de comunicação com nuvem.
+The main goal of EdgeGateway is to simplify telemetry collection from embedded devices without requiring every firmware to implement a complete cloud communication stack.
 
-Com o EdgeGateway é possível:
+With EdgeGateway, it is possible to:
 
-- Ler dados seriais de microcontroladores como ESP32, Arduino, STM32, Raspberry Pi Pico ou módulos industriais.
-- Converter mensagens seriais em publicações MQTT.
-- Receber telemetria BLE e publicar em MQTT.
-- Registrar logs localmente em arquivos CSV.
-- Coletar dados GPS via Bluetooth.
-- Encaminhar comandos MQTT de volta para o dispositivo conectado.
-- Adicionar metadados do gateway, como timestamp de recepção.
-- Executar como serviço Linux em campo.
+- Read serial data from microcontrollers such as ESP32, Arduino, STM32, Raspberry Pi Pico, or industrial modules.
+- Convert serial JSON messages into MQTT publications.
+- Receive BLE telemetry and publish it to MQTT.
+- Store local CSV logs for validation, testing, and offline auditing.
+- Collect GPS data through Bluetooth.
+- Forward MQTT commands back to the connected device.
+- Add gateway-side metadata, such as reception timestamp.
+- Run as a Linux service in field installations.
 
 ---
 
-## Casos de uso
+## Telemetry-focused use cases
 
-### Telemetria IoT
+### IoT telemetry
 
-Coleta de dados ambientais, industriais ou de campo, como:
+EdgeGateway can collect environmental, industrial, and field telemetry, including:
 
-- Temperatura
-- Umidade
-- Pressão
+- Temperature
+- Humidity
+- Pressure
 - CO2
 - VOC
-- Pluviometria
-- Pulsos de medidores
-- GPS
-- Status de dispositivos
-- Dados de sensores customizados
+- Rainfall
+- Pulse counters
+- GPS position
+- Device status
+- Custom sensor payloads
+- Signal quality indicators such as RSSI and SNR
 
-### Gateway serial para MQTT
+### Serial-to-MQTT gateway
 
-Um dispositivo envia JSON pela serial e o EdgeGateway publica automaticamente no broker MQTT.
+A device sends JSON through a serial port and EdgeGateway automatically publishes it to the configured MQTT broker.
 
-Exemplo de entrada serial:
+Example serial input:
 
 ```json
 {
@@ -83,7 +84,7 @@ Exemplo de entrada serial:
 }
 ```
 
-Exemplo publicado no MQTT:
+Example MQTT payload published by the gateway:
 
 ```json
 {
@@ -100,33 +101,33 @@ Exemplo publicado no MQTT:
 }
 ```
 
-### Gateway BLE para MQTT
+### BLE-to-MQTT gateway
 
-Um dispositivo BLE envia notificações contendo JSON. O EdgeGateway valida a mensagem, adiciona metadados e publica no tópico MQTT configurado.
+A BLE device sends notifications containing JSON. EdgeGateway validates the message, adds gateway metadata, and publishes the data to the configured MQTT topic.
 
-### Datalogger local
+### Local datalogger
 
-A interface `serial-to-file` salva os dados recebidos em arquivos CSV, organizados por dispositivo, permitindo testes de bancada e auditoria offline.
+The `serial-to-file` interface stores received data in CSV files, organized by device. This is useful for bench testing, field validation, audit trails, and offline data collection.
 
-### Campo e operação contínua
+### Continuous field operation
 
-O projeto pode ser instalado como serviço Linux usando `systemd`, permitindo operação contínua em Raspberry Pi, gateway industrial, mini PC ou servidor local.
+The project can be installed as a Linux `systemd` service, allowing continuous operation on a Raspberry Pi, industrial gateway, mini PC, or local server.
 
 ---
 
-## Interfaces suportadas
+## Supported interfaces
 
-| Interface | Função | Direção | Status |
+| Interface | Purpose | Direction | Status |
 |---|---|---:|---|
-| `serial-to-file` | Lê dados de uma porta serial e salva localmente em arquivo | Entrada | Implementado |
-| `serial-to-mqtt` | Lê JSON da serial, adiciona metadados e publica em MQTT | Bidirecional | Implementado |
-| `bluetooth-gps` | Lê dados NMEA de GPS Bluetooth e salva localmente | Entrada | Implementado |
-| `bluetooth-BLE` | Lê notificações BLE e mostra os dados recebidos | Entrada | Implementado |
-| `bluetooth-BLE-to-mqtt` | Lê JSON via BLE, adiciona metadados e publica em MQTT | Bidirecional | Implementado |
+| `serial-to-file` | Reads data from a serial port and stores it locally | Input | Implemented |
+| `serial-to-mqtt` | Reads serial JSON, adds metadata, and publishes to MQTT | Bidirectional | Implemented |
+| `bluetooth-gps` | Reads Bluetooth GPS NMEA data and stores it locally | Input | Implemented |
+| `bluetooth-BLE` | Reads BLE notifications and displays received data | Input | Implemented |
+| `bluetooth-BLE-to-mqtt` | Reads JSON over BLE, adds metadata, and publishes to MQTT | Bidirectional | Implemented |
 
 ---
 
-## Estrutura do projeto
+## Project structure
 
 ```text
 EdgeGateway-development/
@@ -156,13 +157,13 @@ EdgeGateway-development/
 
 ---
 
-## Formato de telemetria
+## Telemetry format
 
-A aplicação espera que os dispositivos enviem mensagens em JSON quando o destino for MQTT.
+When the destination is MQTT, devices are expected to send JSON messages.
 
-A validação mínima feita pelo gateway verifica se a mensagem contém uma estrutura compatível com JSON. Depois disso, o payload original é encapsulado no campo `data` e os metadados do gateway são adicionados no campo `gateway_meta`.
+The gateway performs a basic validation to ensure that the incoming payload is valid JSON. After validation, the original device payload is wrapped inside the `data` field, while gateway-generated metadata is added to `gateway_meta`.
 
-Formato publicado:
+Published format:
 
 ```json
 {
@@ -177,7 +178,7 @@ Formato publicado:
 }
 ```
 
-Esse formato facilita o consumo posterior por:
+This structure makes the telemetry easier to consume by:
 
 - Node-RED
 - Home Assistant
@@ -186,15 +187,15 @@ Esse formato facilita o consumo posterior por:
 - InfluxDB
 - ClickHouse
 - MongoDB
-- APIs de telemetria
-- Serviços de alarme
-- Pipelines de IA ou analytics
+- Telemetry APIs
+- Alarm services
+- AI and analytics pipelines
 
 ---
 
-## Exemplo de configuração
+## Configuration example
 
-Crie um arquivo `config.json` na raiz do projeto.
+Create a `config.json` file in the project root.
 
 ```json
 {
@@ -240,9 +241,9 @@ Crie um arquivo `config.json` na raiz do projeto.
 
 ---
 
-## Configuração de porta serial estável no Linux
+## Stable serial port configuration on Linux
 
-Evite usar diretamente `/dev/ttyUSB0` ou `/dev/ttyACM0`, pois esses nomes podem mudar após reconexão ou reboot.
+Avoid using `/dev/ttyUSB0` or `/dev/ttyACM0` directly because these names can change after a reconnect or reboot.
 
 Use:
 
@@ -250,15 +251,15 @@ Use:
 ls /dev/serial/by-path
 ```
 
-ou:
+or:
 
 ```bash
 ls /dev/serial/by-id
 ```
 
-Depois configure o caminho completo no campo `serialport` do `config.json`.
+Then configure the full path in the `serialport` field of `config.json`.
 
-Exemplo:
+Example:
 
 ```json
 {
@@ -272,28 +273,28 @@ Exemplo:
 
 ---
 
-## Instalação
+## Installation
 
-Crie um ambiente virtual:
+Create a virtual environment:
 
 ```bash
 python3 -m venv env
 source env/bin/activate
 ```
 
-No Windows:
+On Windows:
 
 ```bash
-env\Scripts\activate
+env\\Scripts\\activate
 ```
 
-Instale as dependências:
+Install the dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Dependências de Bluetooth no Linux:
+Linux Bluetooth dependencies:
 
 ```bash
 sudo apt-get update
@@ -302,27 +303,27 @@ sudo apt-get install -y bluetooth libbluetooth-dev
 
 ---
 
-## Execução
+## Running the gateway
 
-Execute a aplicação:
+Run the application:
 
 ```bash
 python src/main.py
 ```
 
-A aplicação irá:
+The application will:
 
-1. Carregar o arquivo `config.json`.
-2. Inicializar cada dispositivo configurado.
-3. Abrir as conexões Serial, Bluetooth ou BLE.
-4. Publicar dados válidos no MQTT ou salvar em arquivo.
-5. Manter o processo em execução com mensagens periódicas de keep alive.
+1. Load the `config.json` file.
+2. Initialize each configured device.
+3. Open Serial, Bluetooth, or BLE connections.
+4. Publish valid telemetry to MQTT or save it to files.
+5. Keep the process running with periodic keep-alive messages.
 
 ---
 
-## Instalação como serviço Linux
+## Installing as a Linux service
 
-Para instalar como serviço `systemd`:
+To install EdgeGateway as a `systemd` service:
 
 ```bash
 cd services
@@ -330,19 +331,19 @@ sudo chmod +x install.sh
 sudo ./install.sh
 ```
 
-Ver logs em tempo real:
+View real-time logs:
 
 ```bash
 journalctl -u datalogger.service -f
 ```
 
-Ver últimas mensagens:
+View the latest messages:
 
 ```bash
 journalctl --unit=datalogger.service -n 100 --no-pager
 ```
 
-Remover serviço:
+Remove the service:
 
 ```bash
 cd services
@@ -351,16 +352,16 @@ sudo ./uninstall.sh
 
 ---
 
-## Tópicos MQTT
+## MQTT topics
 
-O projeto usa dois tópicos principais:
+The project uses two main MQTT topics:
 
-| Campo | Descrição |
+| Field | Description |
 |---|---|
-| `subscribe-upstream` | Tópico onde o gateway publica a telemetria recebida dos dispositivos |
-| `subscribe-downstream` | Tópico onde o gateway escuta comandos vindos da plataforma |
+| `subscribe-upstream` | Topic where the gateway publishes telemetry received from devices |
+| `subscribe-downstream` | Topic where the gateway listens for commands coming from the platform |
 
-Exemplo:
+Example:
 
 ```json
 {
@@ -369,13 +370,13 @@ Exemplo:
 }
 ```
 
-### Publicação de telemetria
+### Telemetry publication
 
 ```text
 Device -> EdgeGateway -> MQTT upstream
 ```
 
-### Envio de comandos
+### Command delivery
 
 ```text
 Cloud / Node-RED / API -> MQTT downstream -> EdgeGateway -> Device
@@ -383,27 +384,27 @@ Cloud / Node-RED / API -> MQTT downstream -> EdgeGateway -> Device
 
 ---
 
-## Integração com dashboards e bancos de dados
+## Dashboard and database integration
 
-O EdgeGateway pode ser usado como coletor de borda para alimentar pipelines como:
+EdgeGateway can be used as an edge data collector for pipelines such as:
 
 ```text
 EdgeGateway -> MQTT -> Node-RED -> InfluxDB -> Grafana
 EdgeGateway -> MQTT -> Telegraf -> InfluxDB -> Grafana
-EdgeGateway -> MQTT -> API Python -> ClickHouse -> Grafana
+EdgeGateway -> MQTT -> Python API -> ClickHouse -> Grafana
 EdgeGateway -> MQTT -> MongoDB -> Analytics
 EdgeGateway -> MQTT -> Home Assistant
 ```
 
-Essa arquitetura permite separar a coleta física dos sensores da camada de armazenamento e visualização.
+This architecture separates physical data acquisition from storage, visualization, alarms, and analytics.
 
 ---
 
-## Exemplo para telemetria de pulsos
+## Multi-channel pulse telemetry
 
-Para dispositivos que enviam múltiplos canais de pulso, recomenda-se manter a identificação do canal no payload.
+For devices that send multiple pulse counter channels, keep the physical channel identification inside each pulse item.
 
-Exemplo:
+Example:
 
 ```json
 {
@@ -422,37 +423,63 @@ Exemplo:
 }
 ```
 
-Nesse caso, cada item em `Pulses` representa um canal independente de medição. A aplicação que consome o MQTT pode gravar os dados usando uma chave composta, por exemplo:
+In this case, each object inside `Pulses` represents an independent measurement channel. The application consuming MQTT should store each pulse record using a composite key such as:
 
 ```text
 serial + sensor_channel + timestamp
 ```
 
-Campos recomendados para banco de dados:
+Recommended database fields:
 
-| Campo | Descrição |
+| Field | Description |
 |---|---|
-| `serial` | Identificação do dispositivo |
-| `sensor_channel` | Canal físico do contador de pulsos |
-| `pulse_value` | Valor calculado a partir de `lsb` e `msb` |
-| `radio_rssi` | Intensidade de sinal do dispositivo |
-| `radio_snr` | Relação sinal-ruído |
-| `firmware` | Versão do firmware |
-| `protocol` | Versão do protocolo |
-| `gateway_timestamp` | Timestamp de recebimento no gateway |
+| `serial` | Device identifier |
+| `sensor_channel` | Physical pulse counter channel |
+| `pulse_value` | Calculated value from `lsb` and `msb` |
+| `radio_rssi` | Device signal strength |
+| `radio_snr` | Signal-to-noise ratio |
+| `firmware` | Firmware version |
+| `protocol` | Protocol version |
+| `gateway_timestamp` | Timestamp generated by the gateway when the message was received |
+
+### Pulse value calculation
+
+When the firmware sends pulse counters using `lsb` and `msb`, the recommended normalized value is:
+
+```text
+pulse_value = lsb + (msb * 256)
+```
+
+This allows each pulse channel to be stored as an independent telemetry sample while preserving the device serial number and channel number.
 
 ---
 
-## Desenvolvimento
+## Signal quality telemetry
 
-Instale o pre-commit:
+When available, signal metrics should be stored together with each device sample:
+
+| Field | Meaning |
+|---|---|
+| `radio_rssi` | Received signal strength indicator. Usually expressed in dBm. More negative values indicate weaker signal. |
+| `radio_snr` | Signal-to-noise ratio. Higher values usually indicate a cleaner radio link. |
+| `radio_channel` | Radio channel used by the uplink, when available. |
+| `gateway_id` | Identifier of the gateway that received the radio packet. |
+| `radio_tmst` | Radio timestamp, when provided by the network server. |
+
+These fields are useful for diagnosing coverage issues, antenna positioning, packet loss, gateway performance, and device installation quality.
+
+---
+
+## Development
+
+Install pre-commit:
 
 ```bash
 pip install pre-commit
 pre-commit install
 ```
 
-Executar verificações:
+Run all checks:
 
 ```bash
 pre-commit run --all-files
@@ -460,18 +487,18 @@ pre-commit run --all-files
 
 ---
 
-## Testes
+## Testing
 
-O diretório `examples/` contém projetos de exemplo para envio de dados por serial e BLE.
+The `examples/` directory contains example projects for sending data through Serial and BLE.
 
-Para testar com PlatformIO:
+To test with PlatformIO:
 
 ```bash
 cd examples/arduino
 pio run -t upload
 ```
 
-Depois execute o gateway e monitore o broker MQTT:
+Then run the gateway and monitor the MQTT broker:
 
 ```bash
 mosquitto_sub -h broker.example.com -p 1883 -t "telemetry/#" -v
@@ -481,17 +508,17 @@ mosquitto_sub -h broker.example.com -p 1883 -t "telemetry/#" -v
 
 ## Troubleshooting
 
-### Permissão de porta serial
+### Serial port permission
 
-Adicione o usuário ao grupo `dialout`:
+Add the user to the `dialout` group:
 
 ```bash
 sudo usermod -a -G dialout $USER
 ```
 
-Faça logout/login após o comando.
+Log out and log back in after running this command.
 
-### Verificar dispositivos seriais
+### Check serial devices
 
 ```bash
 dmesg | grep tty
@@ -499,14 +526,14 @@ ls /dev/serial/by-id
 ls /dev/serial/by-path
 ```
 
-### Verificar Bluetooth
+### Check Bluetooth
 
 ```bash
 bluetoothctl
 scan on
 ```
 
-### Verificar serviço
+### Check the service
 
 ```bash
 systemctl status datalogger.service
@@ -515,28 +542,28 @@ journalctl -u datalogger.service -f
 
 ---
 
-## Segurança
+## Security recommendations
 
-- Não versionar credenciais reais no `config.json`.
-- Usar usuários MQTT com permissões limitadas por tópico.
-- Preferir TLS em produção quando o broker estiver exposto na internet.
-- Manter dependências atualizadas.
-- Executar o serviço com usuário limitado, evitando permissões de root quando possível.
-
----
-
-## Roadmap sugerido
-
-- Normalização opcional de payloads de pulso em múltiplos canais.
-- Suporte nativo a RSSI/SNR como metadados de telemetria.
-- Reconexão BLE com backoff configurável.
-- Configuração por variáveis de ambiente para Docker/Kubernetes.
-- Exportador direto para InfluxDB ou ClickHouse.
-- Métricas internas do gateway, como uptime, mensagens por minuto e falhas de conexão.
-- Testes automatizados para parsers de telemetria.
+- Do not commit real credentials in `config.json`.
+- Use MQTT users with topic-level restricted permissions.
+- Prefer TLS in production when the broker is exposed to the internet.
+- Keep dependencies updated.
+- Run the service with a limited Linux user instead of root whenever possible.
 
 ---
 
-## Licença
+## Suggested roadmap
 
-Consulte o arquivo [`LICENSE`](LICENSE).
+- Optional normalization of multi-channel pulse payloads.
+- Native support for RSSI/SNR as telemetry metadata.
+- BLE reconnection with configurable backoff.
+- Environment-variable configuration for Docker and Kubernetes.
+- Direct exporter for InfluxDB or ClickHouse.
+- Internal gateway metrics, such as uptime, messages per minute, and connection failures.
+- Automated tests for telemetry parsers.
+
+---
+
+## License
+
+See the [`LICENSE`](LICENSE) file.
